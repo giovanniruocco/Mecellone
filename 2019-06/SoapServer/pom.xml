@@ -24,4 +24,17 @@
             <version>3.1.6</version>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <mainClass>edu.uniroma1.msecs.soapserver.Server</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>   
 </project>
