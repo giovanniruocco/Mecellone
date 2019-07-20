@@ -5,13 +5,21 @@
  */
 package edu.uniroma1.msecs.soapserver;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author biar
  */
+@XmlRootElement
 public class Professor {
     private String name;
     private String surname;
+    
+    private static Map<String, Professor> professors = new HashMap<String, Professor>();
+    private static Integer maxId = -1;
 
     public Professor(String name, String surname) {
         this.name = name;
@@ -32,5 +40,14 @@ public class Professor {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+    
+    public static Professor getProfessor(String id) {
+        return professors.get(id);
+    }
+    
+    public static void insertProfessor(Professor professor) {
+        maxId += 1;
+        professors.put(Integer.toString(maxId), professor);
     }
 }
