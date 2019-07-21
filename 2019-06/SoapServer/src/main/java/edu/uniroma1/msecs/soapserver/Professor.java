@@ -20,6 +20,8 @@ public class Professor {
     
     private static Map<String, Professor> professors = new HashMap<String, Professor>();
     private static Integer maxId = -1;
+    
+    public Professor() { }
 
     public Professor(String name, String surname) {
         this.name = name;
