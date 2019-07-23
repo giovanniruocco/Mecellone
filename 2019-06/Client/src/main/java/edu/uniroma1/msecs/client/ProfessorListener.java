@@ -57,7 +57,7 @@ public class ProfessorListener implements MessageListener {
             edu.uniroma1.msecs.soapserver.Exam port = service.getExamImplPort();
             edu.uniroma1.msecs.soapserver.Professor result = port.getDetails(id);
             
-            System.out.println("Professor " + id + "is " + result.getName() + " " + result.getSurname() + "and has rank" + rank);
+            System.out.println("Professor " + id + " is " + result.getName() + " " + result.getSurname() + " and has rank " + rank);
         } catch (JMSException err) {
             err.printStackTrace();
         }
