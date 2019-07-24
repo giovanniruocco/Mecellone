@@ -48,9 +48,9 @@ public class ExamImpl implements Exam {
             }
         } catch(SQLException e) {
             System.err.println(e.getMessage());
-        } finally {
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -69,9 +69,9 @@ public class ExamImpl implements Exam {
             }
         } catch(SQLException e) {
             System.err.println(e.getMessage());
-        } finally {
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -87,9 +87,9 @@ public class ExamImpl implements Exam {
             }
         } catch(SQLException e) {
             System.err.println(e.getMessage());
-        } finally {
-            return movies;
         }
+
+        return movies;
     }
     
     public void close() {
