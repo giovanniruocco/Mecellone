@@ -5,6 +5,8 @@
  */
 package it.uniroma1.msecs.ay2019.e3;
 
+import java.sql.*;
+import java.sql.Connection;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +20,8 @@ import javax.naming.NamingException;
  * @author biar
  */
 public class FlightListener implements MessageListener {
-    private TopicConnection connection;
+    private Connection connection;
+    private TopicConnection jmsConnection;
     private final static Pattern statusPattern = Pattern.compile(".* : (.*)");
 
 
@@ -30,14 +33,17 @@ public class FlightListener implements MessageListener {
             Context ctx = new InitialContext(props);
 
             ConnectionFactory connectionFactory = (ConnectionFactory)ctx.lookup("ConnectionFactory");
-            connection = (TopicConnection)connectionFactory.createConnection();
-            TopicSession session = (TopicSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            jmsConnection = (TopicConnection)connectionFactory.createConnection();
+            TopicSession session = (TopicSession) jmsConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             Destination destination = (Destination)ctx.lookup("dynamicTopics/Flights");
             TopicSubscriber subscriber = session.createSubscriber((Topic)destination);
             subscriber.setMessageListener(this);
-        } catch (JMSException | NamingException err) {
+
+            Class.forName("org.sqlite.JDBC");
+        } catch (JMSException | NamingException | ClassNotFoundException err) {
             err.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -50,9 +56,17 @@ public class FlightListener implements MessageListener {
             Matcher matcher = statusPattern.matcher(text);
             if (matcher.find()) {
                 String status = matcher.group(1);
+
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO flights VALUES(?, ?)");
+                statement.setQueryTimeout(30);
+
+                statement.setString(1, flight);
+                statement.setString(2, status);
+                statement.executeUpdate();
+
                 System.out.println(String.format("%s -> %s", flight, status));
             }
-        } catch (JMSException err) {
+        } catch (JMSException | SQLException err) {
             err.printStackTrace();
         }
     }
@@ -60,8 +74,9 @@ public class FlightListener implements MessageListener {
 
     public void start() {
         try {
-            connection.start();
-        } catch (JMSException err) {
+            jmsConnection.start();
+            connection = DriverManager.getConnection("jdbc:sqlite:/home/biar/se-2019_09.db");
+        } catch (JMSException | SQLException err) {
             err.printStackTrace();
         }
     }
@@ -69,8 +84,11 @@ public class FlightListener implements MessageListener {
 
     public void stop() {
         try {
-            connection.stop();
-        } catch (JMSException err) {
+            jmsConnection.stop();
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (JMSException | SQLException err) {
             err.printStackTrace();
         }
     }
