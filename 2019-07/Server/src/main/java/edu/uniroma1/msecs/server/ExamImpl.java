@@ -27,7 +27,8 @@ public class ExamImpl implements Exam {
         try {
             Class.forName("org.sqlite.JDBC");
             
-            connection = DriverManager.getConnection("jdbc:sqlite:/home/biar/msecs-1-se-2019_07.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:/home/biar/...
+                                                     msecs-1-se-2019_07.db");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -36,7 +37,8 @@ public class ExamImpl implements Exam {
     @Override
     public Director getDirector(int ID) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM DIRECTORS WHERE ID = ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM...
+                                                             DIRECTORS WHERE ID = ?;");
             statement.setInt(1, ID);
             statement.setQueryTimeout(30);
             
@@ -56,7 +58,8 @@ public class ExamImpl implements Exam {
     @Override
     public Movie getMovie(int ID) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM MOVIES WHERE ID = ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM...
+                                                                MOVIES WHERE ID = ?;");
             statement.setInt(1, ID);
             statement.setQueryTimeout(30);
             
