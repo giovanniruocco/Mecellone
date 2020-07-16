@@ -1,23 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.uniroma1.msecs.server;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author biar
- */
 @XmlRootElement
 public class Movie {
     private int ID;
     private int directorID;
     private String title;
     private String year;
-
     public Movie(int ID, int directorID, String title, String year) {
         this.ID = ID;
         this.directorID = directorID;
